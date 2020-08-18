@@ -1,5 +1,6 @@
 import fs from 'fs';
 import Jimp = require('jimp');
+import { Request, Response } from 'express';
 
 // filterImageFromURL
 // helper function to download, filter, and save the filtered image locally
@@ -32,3 +33,25 @@ export async function deleteLocalFiles(files:Array<string>){
         fs.unlinkSync(file);
     }
 }
+
+// Middleware image validator
+// Checks for the existence of an URL and extensions compatible with Jimp(https://www.npmjs.com/package/jimp)
+export function validateImage(req: Request, res: Response, next: Function) {
+
+    const {image_url: imageUrl} = req.query;
+
+    if (!imageUrl) {
+      return res.json({message: "Empty URL provided"}).status(400);
+    }
+
+    if(!checkExtension(imageUrl)) {
+      return res.json({message: "Invalid image extension provided. Accepted are [jpg|jpeg|png|bmp|tiff|gif]",}).status(422);
+    }
+
+    req.body.imageUrl = imageUrl;
+    next();
+  }
+
+  function checkExtension(imageUrl: string): boolean {
+    return imageUrl.match(/.*?\.(jpg|jpeg|png|bmp|tiff|gif)$/) !== null;
+  }

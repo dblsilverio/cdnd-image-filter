@@ -1,6 +1,6 @@
-import express from 'express';
+import express, { Request, Response } from 'express';
 import bodyParser from 'body-parser';
-import {filterImageFromURL, deleteLocalFiles} from './util/util';
+import {filterImageFromURL, deleteLocalFiles, validateImage} from './util/util';
 
 (async () => {
 
@@ -29,12 +29,23 @@ import {filterImageFromURL, deleteLocalFiles} from './util/util';
 
   /**************************************************************************** */
 
+  app.get("/filteredimage", [validateImage], async (req: Request, res: Response) => {
+
+    const {imageUrl} = req.body;
+
+    const filteredImage = await filterImageFromURL(imageUrl);
+
+    res.sendFile(filteredImage, (err) => {
+      deleteLocalFiles([filteredImage]);
+    });
+
+  });
+
   //! END @TODO1
-  
   // Root Endpoint
   // Displays a simple message to the user
-  app.get( "/", async ( req, res ) => {
-    res.send("try GET /filteredimage?image_url={{}}")
+  app.get( "/", async ( req: Request, res: Response ) => {
+    res.send("try GET /filteredimage?image_url={{URL}}")
   } );
   
 
