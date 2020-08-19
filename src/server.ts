@@ -33,12 +33,12 @@ import { filterImageFromURL, deleteLocalFiles, validateImage } from './util/util
 
         if (err) {
           console.error(`Error sending file: ${err}`);
-          res.send({ error: err }).status(500);
+          res.status(500).send({ error: err });
         }
       });
     } catch (exc) {
       console.error(`Exception filtering image: ${exc}`);
-      res.send({ error: `${exc}` }).status(500);
+      res.status(500).send({ error: `${exc}` });
     }
 
   });
