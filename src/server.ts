@@ -24,10 +24,10 @@ import { filterImageFromURL, deleteLocalFiles, validateImage } from './util/util
 
   app.get("/filteredimage", [validateImage], async (req: Request, res: Response) => {
 
-    const { imageUrl } = req.body;
+    const { imageUrl }: { imageUrl: string } = req.body;
 
     try {
-      const filteredImage = await filterImageFromURL(imageUrl);
+      const filteredImage: string = await filterImageFromURL(imageUrl);
       res.sendFile(filteredImage, (err) => {
         deleteLocalFiles([filteredImage]);
 
