@@ -41,11 +41,11 @@ export function validateImage(req: Request, res: Response, next: Function) {
   const { image_url: imageUrl }: { image_url: string } = req.query;
 
   if (!imageUrl) {
-    return res.json({ message: "Empty URL provided" }).status(400);
+    return res.status(400).json({ message: "Empty URL provided" });
   }
 
   if (!checkExtension(imageUrl)) {
-    return res.json({ message: "Invalid image extension provided. Accepted are [jpg|jpeg|png|bmp|tiff|gif]", }).status(422);
+    return res.status(422).json({ message: "Invalid image extension provided. Accepted are [jpg|jpeg|png|bmp|tiff|gif]", });
   }
 
   req.body.imageUrl = imageUrl;
